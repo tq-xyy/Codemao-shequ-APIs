@@ -1,0 +1,603 @@
+# 密码登录 API 
+
+请求 URL: https://api.codemao.cn/tiger/v3/web/accounts/login
+请求方法: POST
+请求信息：{"identity":"#Username#","password":"#Password#","pid":"65edCTyg"}
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+
+请求失败：
+状态代码: 403 Forbidden
+
+请求成功：
+状态代码: 200 OK
+返回cookie设置
+
+
+************************************************************************************************
+
+# 验证cookie API
+
+请求 URL: https://shequ.codemao.cn/user/
+请求方法: GET
+无请求信息
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+若cookie有效，则状态代码为200，无效则为304
+
+************************************************************************************************
+
+# 获取自己信息1 API
+
+请求 URL: https://api.codemao.cn/web/users/details
+请求方法: GET
+无请求信息
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+需传入cookie
+
+获取到json
+
+数据key --  数据分类 -- 数据类型
+id   --  用户ID --  int
+nickname -- 用户昵称 -- str
+avatar_url -- 用户头像URL -- str
+email  --  用户邮箱 -- str
+gold   --   用户金币数 -- int
+qq   --  用户QQ  -- str
+real_name  --  用户真名 -- str
+sex   --  用户性别 -- str(男MALE  女FEMALE)
+username -- 用户名 -- str
+voice_forbidden -- 已被禁言 -- bool
+birthday -- 生日 -- int (时间戳)
+description -- 简介 -- str
+phone_number -- 加掩码的电话 -- str
+create_time -- 用户创建时间 -- int(时间戳)
+oauths -- 用户账户绑定情况 -- list(列表内有数组见下)
+ |       原数据：[ {'id':1,'name':'wechat','is_bound':False} , ...]
+ |       翻译： id -- 1:微信 2:QQ 3:优学派 4:国家教育资源公共服务平台 5:豹豹龙官网 6:新华文轩出版传媒 7:云知声 8.icollege远程教育平台 9.dledc? 10.apple? 11.我time网 12.中国招商银行 13:编程猫-新零售
+ |              name -- 上述对应的名称     is_bound -- 是否绑定
+has_password -- 用户有密码 -- bool
+user_type -- 用户类型 -- int (未知，盲猜有普通用户、管理员之分)
+show_guide_flag  -- 展示向导标志 -- int (未知，盲猜引导页面)
+
+************************************************************************************************
+
+# 获取自己信息2(头像地址、注册手机号等) API
+
+
+请求 URL: https://api.codemao.cn/api/user/info
+请求方法: GET
+无请求信息
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+需传入cookie
+
+获取到json
+
+************************************************************************************************
+
+# 获取其它用户信息 API
+
+请求 URL: https://api.codemao.cn/api/user/info/detail/#USERID
+请求方法: GET
+无请求信息
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+需传入cookie
+
+获取到json
+
+数据key --  数据分类 -- 数据类型
+isFollowing -- 我是否已关注 -- int
+collectionTimes -- 收藏数 -- int
+forkedTimes -- 再创作数 -- int
+praiseTimes -- 获赞数 -- int
+viewTimes -- 被浏览次数 -- int
+user -- 用户信息 -- dict 如下：
+|   id -- 用户id ；  nickname -- 用户昵称 ；  sex -- 性别(int 0女 1男) ； description -- 描述 ；doing -- 正在做的 ;
+|   avatar -- 头像地址 ； level -- 等级 ；preview_work_id -- 展示作品id ； preview_work_src --  展示作品地址
+work -- 展示作品详情 -- dict 如下：
+|   id -- 作品id   name -- 作品名称   preview -- 作品预览图
+
+************************************************************************************************
+
+# 更改自己的用户信息(昵称、性别、个性签名、真实姓名、初始日期、头像地址) API
+
+请求 URL: https://api.codemao.cn/tiger/v3/web/accounts/info
+请求方法: PATCH
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+需传入cookie
+
+{"nickname":"#名称#","sex":性别id(0女 1男),"description":"#描述#","fullname":"#名称#","birthday":生日时间戳,"avatar_url":"#地址#"}
+
+************************************************************************************************
+
+# 获取论坛帖子信息 API
+
+请求 URL: https://api.codemao.cn/web/forums/posts/#帖子ID#/details
+请求方法: GET
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+帖子不存在时：
+数据key --  数据分类 -- 数据类型
+error_code -- 错误代码 -- str
+error_message -- 错误信息 -- str
+log_uuid -- 用户登录uuid -- str
+domain -- ??? -- list
+
+帖子存在时：
+数据key --  数据分类 -- 数据类型
+id -- 帖子id -- int
+title -- 帖子标题 -- str
+content -- 帖子内容(HTML) -- str
+board_id -- 分区id -- int
+board_name -- 分区名称 -- str
+updated_at -- 更新时间 -- int(时间戳)
+created_at -- 创建时间 -- int(时间戳)
+n_views -- 帖子访问量 -- int
+n_replies -- 评论回复数 -- int
+n_comments -- 评论数(楼主) -- int
+is_authorized -- 被授权的文章 -- bool
+is_featured -- 有特色的文章? -- bool
+is_hotted -- 热门的文章 -- bool
+is_pinned -- 置顶的文章 -- bool
+tutorial_flag -- 被辅导标志 -- int
+ask_help_flag -- 求助标志 -- int
+user -- 帖子用户信息 -- dict
+|   id -- 用户id ； nickname -- 用户名称 ； avatar_url -- 用户头像 ； subject_id -- 课程id ；
+|   work_shop_name -- 参加工作室的名称 ； work_shop_level -- 工作室等级 ; wuhan_medal -- 拥有武汉奖章
+
+************************************************************************************************
+
+# 获取帖子评论 API
+
+请求 URL: https://api.codemao.cn/web/forums/posts/#帖子ID#/replies   (后面可选)?page=页数&limit=显示数量（30max）
+请求方法: GET
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+评论规则：
+数据key --  数据分类 -- 数据类型
+id -- 用户id -- int
+is_top -- 评论被置顶 -- bool
+n_likes -- 点赞数 -- int
+is_liked -- 我喜欢 -- bool
+content -- 评论内容(html) -- str
+n_comments -- 回复评论数 -- int
+updated_at -- 更新时间 -- int(时间戳)
+created_at -- 创建时间 -- int(时间戳)
+earliest_comments -- 回复的评论 -- dict(与上述一致)
+
+************************************************************************************************
+
+# 评论帖子 API
+
+请求 URL: https://api.codemao.cn/web/forums/posts/#帖子ID#/replies
+请求方法: POST
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+{"content":"#html#"}
+
+状态码 204 成功
+
+************************************************************************************************
+
+# 删除评论 API
+
+请求 URL: https://api.codemao.cn/web/forums/replies/#评论ID#
+请求方法: DELETE
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+状态码 204 成功
+
+************************************************************************************************
+
+# 回复评论 API
+
+请求 URL: https://api.codemao.cn/web/forums/replies/#帖子ID#/comments
+请求方法: POST
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+{"parent_id":#回复评论id#,"content":"#html#"}
+
+#回复评论#：如果是直接回复楼主则填 0 ，如果回复的是回复楼主的人则要填写相对那个人的评论id。
+
+状态码 204 成功
+
+************************************************************************************************
+
+# 删除回复评论 API
+
+请求 URL: https://api.codemao.cn/web/forums/comments/#回复评论id#
+请求方法: DELETE
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+状态码 204 成功
+
+************************************************************************************************
+
+# 为主评论点赞 API
+
+请求 URL: https://api.codemao.cn/web/forums/comments/#评论id#/liked?source=REPLY
+请求方法: PUT
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+{}
+
+状态码 204 成功
+
+************************************************************************************************
+
+# 为主评论取消点赞 API
+
+请求 URL: https://api.codemao.cn/web/forums/comments/#评论id#/liked?source=REPLY
+请求方法：DELETE
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+source=REPLY
+
+状态码 204 成功
+
+************************************************************************************************
+
+# 为回复评论点赞 API
+
+请求 URL: https://api.codemao.cn/web/forums/comments/#评论id#/liked?source=comments
+请求方法: PUT
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+{}
+
+状态码 204 成功
+
+************************************************************************************************
+
+# 为回复评论取消点赞 API
+
+请求 URL: https://api.codemao.cn/web/forums/comments/#评论id#/liked?source=COMMENT
+请求方法：DELETE
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+source=REPLY
+
+状态码 204 成功
+
+************************************************************************************************
+
+# 获取我回复评论的帖子 API
+
+请求 URL: https://api.codemao.cn/web/forums/posts/mine/replied  ?page=#页数#&limit=#一页总量#（30max）
+请求方法: GET
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+offset:偏移
+limit:一页数量
+total:总数
+counted:???
+items中：
+数据key --  数据分类 -- 数据类型
+id -- 帖子id -- int
+title -- 帖子标题 -- str
+content -- 帖子摘要(HTML) -- str
+created_at -- 创建时间 -- int(时间戳)
+n_replies -- 评论回复数 -- int
+n_comments -- 评论数(楼主) -- int
+is_authorized -- 被授权的文章 -- bool
+is_featured -- 有特色的文章? -- bool
+is_hotted -- 热门的文章 -- bool
+is_pinned -- 置顶的文章 -- bool
+tutorial_flag -- 被辅导标志 -- int
+ask_help_flag -- 求助标志 -- int
+user -- 帖子用户信息 -- dict
+|   id -- 用户id ； nickname -- 用户名称 ； avatar_url -- 用户头像 ； subject_id -- 课程id ；
+|   work_shop_name -- 参加工作室的名称 ； work_shop_level -- 工作室等级 ; wuhan_medal -- 拥有武汉奖章
+commented_at -- 评论时间 -- int(时间戳)
+commented_user -- 评论用户信息 -- dict 如下：
+|   id -- 评论用户id ； nickname -- 用户昵称 ； avatar_url -- 头像地址 ； subject_id -- 课程id ；
+|   work_shop_name -- 参加工作室的名称 ； work_shop_level -- 工作室等级 ; wuhan_medal -- 拥有武汉奖章
+replied_at -- 最新回复（非自己回复） -- int(时间戳)
+|   id -- 评论用户id ； nickname -- 用户昵称 ； avatar_url -- 头像地址 ； subject_id -- 课程id ；
+|   work_shop_name -- 参加工作室的名称 ； work_shop_level -- 工作室等级 ; wuhan_medal -- 拥有武汉奖章
+
+************************************************************************************************
+
+# 获取我发布评论的帖子 API
+
+请求 URL: https://api.codemao.cn/web/forums/posts/mine/created  ?page=#页数#&limit=#一页总量#（30max）
+请求方法: GET
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+offset:偏移
+limit:一页数量
+total:总数
+counted:???
+items中：
+数据key --  数据分类 -- 数据类型
+id -- 帖子id -- int
+title -- 帖子标题 -- str
+content -- 帖子摘要(HTML) -- str
+created_at -- 创建时间 -- int(时间戳)
+n_replies -- 评论回复数 -- int
+n_comments -- 评论数(楼主) -- int
+is_authorized -- 被授权的文章 -- bool
+is_featured -- 有特色的文章? -- bool
+is_hotted -- 热门的文章 -- bool
+is_pinned -- 置顶的文章 -- bool
+tutorial_flag -- 被辅导标志 -- int
+ask_help_flag -- 求助标志 -- int
+user -- 帖子用户信息 -- dict
+|   id -- 用户id ； nickname -- 用户名称 ； avatar_url -- 用户头像 ； subject_id -- 课程id ；
+|   work_shop_name -- 参加工作室的名称 ； work_shop_level -- 工作室等级 ; wuhan_medal -- 拥有武汉奖章
+commented_at -- 评论时间 -- int(时间戳)
+commented_user -- 评论用户信息 -- dict 如下：
+|   id -- 评论用户id ； nickname -- 用户昵称 ； avatar_url -- 头像地址 ； subject_id -- 课程id ；
+|   work_shop_name -- 参加工作室的名称 ； work_shop_level -- 工作室等级 ; wuhan_medal -- 拥有武汉奖章
+replied_at -- 最新回复（非自己回复） -- int(时间戳)
+|   id -- 评论用户id ； nickname -- 用户昵称 ； avatar_url -- 头像地址 ； subject_id -- 课程id ；
+|   work_shop_name -- 参加工作室的名称 ； work_shop_level -- 工作室等级 ; wuhan_medal -- 拥有武汉奖章
+
+************************************************************************************************
+
+# 批量获取文章信息 API 会获取最新回复
+
+请求 URL: https://api.codemao.cn/web/forums/posts/all?ids=#正则表达式#
+请求方法: GET
+
+#正则表达式#:如 1,2,3,4
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+数据key --  数据分类 -- 数据类型
+id -- 帖子id -- int
+title -- 帖子标题 -- str
+content -- 帖子摘要(HTML) -- str
+created_at -- 创建时间 -- int(时间戳)
+n_replies -- 评论回复数 -- int
+n_comments -- 评论数(楼主) -- int
+is_authorized -- 被授权的文章 -- bool
+is_featured -- 有特色的文章? -- bool
+is_hotted -- 热门的文章 -- bool
+is_pinned -- 置顶的文章 -- bool
+tutorial_flag -- 被辅导标志 -- int
+ask_help_flag -- 求助标志 -- int
+user -- 帖子用户信息 -- dict
+|   id -- 用户id ； nickname -- 用户名称 ； avatar_url -- 用户头像 ； subject_id -- 课程id ；
+|   work_shop_name -- 参加工作室的名称 ； work_shop_level -- 工作室等级 ; wuhan_medal -- 拥有武汉奖章
+commented_at -- 评论时间 -- int(时间戳)
+commented_user -- 评论用户信息 -- dict 如下：
+|   id -- 评论用户id ； nickname -- 用户昵称 ； avatar_url -- 头像地址 ； subject_id -- 课程id ；
+|   work_shop_name -- 参加工作室的名称 ； work_shop_level -- 工作室等级 ; wuhan_medal -- 拥有武汉奖章
+replied_at -- 最新回复（非自己回复） -- int(时间戳)
+|   id -- 评论用户id ； nickname -- 用户昵称 ； avatar_url -- 头像地址 ； subject_id -- 课程id ；
+|   work_shop_name -- 参加工作室的名称 ； work_shop_level -- 工作室等级 ; wuhan_medal -- 拥有武汉奖章
+
+************************************************************************************************
+
+# 获取首页最新回复文章 API
+
+请求 URL: https://api.codemao.cn/web/forums/posts/hots/all
+请求方法: GET
+
+说明：包括制定文章共300项
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+items中（列表）：一个项一个文章ID
+
+************************************************************************************************
+
+# 获取七日热门 API
+
+请求 URL: https://api.codemao.cn/web/forums/boards/posts/7dayHot (可选)?&page=#页数#&limit=#数量#&board_id=#版块ID#
+请求方法: GET
+
+#版块ID#:    
+1 -- 点猫看板 ； 2 -- 积木编程乐园 ； 3 -- 代码岛 ； 4 -- 通天塔 ；  5 -- 你问我答 ； 6 -- 动漫小说 ；
+7 -- 灌水池塘 ； 8 -- 我要提建议   ； 9 -- 作品秀 ；10 -- 工作室 ； 11 -- Python乐园 ； 12 -- 求素材；
+13 -- NOC编程猫比赛 ； 15 -- UnderTale ； 16 -- I wanna ； 17 -- 热门活动  ； 18 -- Scratch专区 ；
+19 -- 动作游戏专区 ； 20 -- 射击游戏专区 ； 21 -- 休闲游戏专区 ；22 -- 学术作品专区 ；23 -- 艺术作品专区 ；
+24 -- 工作室招新； 25 -- 师徒广场 ； 26 -- 源码精灵 
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+************************************************************************************************
+
+# 获取精品合集 API
+
+请求 URL: https://api.codemao.cn/web/forums/posts/selections (可选)?&page=#页数#&limit=#数量#&board_id=#版块ID#
+请求方法: GET
+
+#版块ID#:    
+1 -- 点猫看板 ； 2 -- 积木编程乐园 ； 3 -- 代码岛 ； 4 -- 通天塔 ；  5 -- 你问我答 ； 6 -- 动漫小说 ；
+7 -- 灌水池塘 ； 8 -- 我要提建议   ； 9 -- 作品秀 ；10 -- 工作室 ； 11 -- Python乐园 ； 12 -- 求素材；
+13 -- NOC编程猫比赛 ； 15 -- UnderTale ； 16 -- I wanna ； 17 -- 热门活动  ； 18 -- Scratch专区 ；
+19 -- 动作游戏专区 ； 20 -- 射击游戏专区 ； 21 -- 休闲游戏专区 ；22 -- 学术作品专区 ；23 -- 艺术作品专区 ；
+24 -- 工作室招新； 25 -- 师徒广场 ； 26 -- 源码精灵 
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+************************************************************************************************
+
+# 获取求帮助合集 API
+
+请求 URL: https://api.codemao.cn/web/forums/boards/posts/ask-help (可选)?&page=#页数#&limit=#数量#&board_id=#版块ID#
+请求方法: GET
+
+#版块ID#:    
+1 -- 点猫看板 ； 2 -- 积木编程乐园 ； 3 -- 代码岛 ； 4 -- 通天塔 ；  5 -- 你问我答 ； 6 -- 动漫小说 ；
+7 -- 灌水池塘 ； 8 -- 我要提建议   ； 9 -- 作品秀 ；10 -- 工作室 ； 11 -- Python乐园 ； 12 -- 求素材；
+13 -- NOC编程猫比赛 ； 15 -- UnderTale ； 16 -- I wanna ； 17 -- 热门活动  ； 18 -- Scratch专区 ；
+19 -- 动作游戏专区 ； 20 -- 射击游戏专区 ； 21 -- 休闲游戏专区 ；22 -- 学术作品专区 ；23 -- 艺术作品专区 ；
+24 -- 工作室招新； 25 -- 师徒广场 ； 26 -- 源码精灵 
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+************************************************************************************************
+
+# 获取搜索 API
+
+请求 URL: https://api.codemao.cn/web/forums/posts/search?title=#内容# (可选)?&page=#页数#&limit=#数量#&board_id=#版块ID#
+请求方法: GET
+
+#版块ID#:    
+1 -- 点猫看板 ； 2 -- 积木编程乐园 ； 3 -- 代码岛 ； 4 -- 通天塔 ；  5 -- 你问我答 ； 6 -- 动漫小说 ；
+7 -- 灌水池塘 ； 8 -- 我要提建议   ； 9 -- 作品秀 ；10 -- 工作室 ； 11 -- Python乐园 ； 12 -- 求素材；
+13 -- NOC编程猫比赛 ； 15 -- UnderTale ； 16 -- I wanna ； 17 -- 热门活动  ； 18 -- Scratch专区 ；
+19 -- 动作游戏专区 ； 20 -- 射击游戏专区 ； 21 -- 休闲游戏专区 ；22 -- 学术作品专区 ；23 -- 艺术作品专区 ；
+24 -- 工作室招新； 25 -- 师徒广场 ； 26 -- 源码精灵 
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+************************************************************************************************
+
+# 获取论坛版块信息 API
+
+请求 URL: https://api.codemao.cn/web/forums/boards/#版块ID#
+请求方法: GET
+
+#版块ID#:    
+1 -- 点猫看板 ； 2 -- 积木编程乐园 ； 3 -- 代码岛 ； 4 -- 通天塔 ；  5 -- 你问我答 ； 6 -- 动漫小说 ；
+7 -- 灌水池塘 ； 8 -- 我要提建议   ； 9 -- 作品秀 ；10 -- 工作室 ； 11 -- Python乐园 ； 12 -- 求素材；
+13 -- NOC编程猫比赛 ； 15 -- UnderTale ； 16 -- I wanna ； 17 -- 热门活动  ； 18 -- Scratch专区 ；
+19 -- 动作游戏专区 ； 20 -- 射击游戏专区 ； 21 -- 休闲游戏专区 ；22 -- 学术作品专区 ；23 -- 艺术作品专区 ；
+24 -- 工作室招新； 25 -- 师徒广场 ； 26 -- 源码精灵 
+
+返回：
+存在版块：
+数据key -- 数据说明 -- 数据类型
+id -- 版块ID -- int
+name -- 版块名称 -- str
+description -- 版块简介 -- str
+icon_url -- 版块图片网址 -- str
+is_hot -- 版块是否热门 -- bool
+has_popular -- 版块是否流行 -- bool
+has_selection -- 版块是否被选拔? -- bool
+n_posts -- 版块帖子数 -- int
+n_discussions -- 版块讨论数 -- int
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+************************************************************************************************
+
+# 获取版块文章 API
+
+请求 URL: https://api.codemao.cn/web/forums/boards/#版块id#/posts (可选)?&page=#页数#&limit=#数量#
+请求方法: GET
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+************************************************************************************************
+
+# 举报文章 API
+
+请求 URL: https://api.codemao.cn/web/reports/posts
+请求方法: POST
+
+成功：返回举报ID
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+{"post_id":"#文章ID#","reason_id":"#举报项#","description":"#举报描述#"}
+
+
+#举报项#：1 -- 违法违规 ； 2 -- 色情暴力 ； 3 -- 侵犯隐私 ； 4 -- 人身攻击 ； 5 -- 引战 ； 
+		  6 -- 垃圾广告 ； 7 -- 无意义刷屏 ； 8 -- 不良信息
+		  
+************************************************************************************************
+
+# 举报评论 API
+
+请求 URL: https://api.codemao.cn/web/reports/posts/discussions
+请求方法: POST
+
+{"discussion_id":"#评论ID#","source":"REPLY","reason_id":"#举报项#","description":"#内容(可选)#"}
+
+#举报项#：1 -- 违法违规 ； 2 -- 色情暴力 ； 3 -- 侵犯隐私 ； 4 -- 人身攻击 ； 5 -- 引战 ； 
+		  6 -- 垃圾广告 ； 7 -- 无意义刷屏 ； 8 -- 不良信息 ； 0 -- 自定义（须填写内容）
+		  
+************************************************************************************************
+
+
+# 发布帖子 API
+
+请求 URL: https://api.codemao.cn/web/forums/boards/#版块ID#/posts
+请求方法: POST
+
+#版块ID#:    
+1 -- 点猫看板 ； 2 -- 积木编程乐园 ； 3 -- 代码岛 ； 4 -- 通天塔 ；  5 -- 你问我答 ； 6 -- 动漫小说 ；
+7 -- 灌水池塘 ； 8 -- 我要提建议   ； 9 -- 作品秀 ；10 -- 工作室 ； 11 -- Python乐园 ； 12 -- 求素材；
+13 -- NOC编程猫比赛 ； 15 -- UnderTale ； 16 -- I wanna ； 17 -- 热门活动  ； 18 -- Scratch专区 ；
+19 -- 动作游戏专区 ； 20 -- 射击游戏专区 ； 21 -- 休闲游戏专区 ；22 -- 学术作品专区 ；23 -- 艺术作品专区 ；
+24 -- 工作室招新； 25 -- 师徒广场 ； 26 -- 源码精灵 
+
+{"title":"#标题(5-50字)#","content":"#html内容#"}
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+************************************************************************************************
+
+# 删除帖子 API
+
+请求 URL: https://api.codemao.cn/web/forums/posts/#帖子ID#
+请求方法: DELETE
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+
+成功：返回状态码 204
+
+************************************************************************************************
+
+# 本周推荐(未写到源码)
+
+请求 URL: https://api.codemao.cn/web/contents/get-key?content_key=forum.index.top.recommend&limit=4
+请求方法: GET
+
+请求说明：
+header添加 {"User_Agent": User_Agent,"Content-Type": "application/json;charset=UTF-8"}
+
+************************************************************************************************
