@@ -22,4 +22,10 @@ Codemao_Debug类：程序内部的调试，用户不可调用，不多做赘述�
 
 #### 使用说明
 
+## APIs.txt 内存放目前找到的编程猫论坛API
+
+## Setup.py 是安装CodemaoShequAPIs模块，运行即可（非编译后运行）
+
+## CodemaoShequAPIs.py 是源码文件
+
 ## 请下载查看 使用说明.docx 文件！！！
